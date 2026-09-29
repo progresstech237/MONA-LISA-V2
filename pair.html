@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🥰 MONA LISA 🤭 — Pairing</title>
+<link rel="icon" href="https://files.catbox.moe/4dwiou.png">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0b0710;
+    --card:rgba(20,14,26,0.72);
+    --border:rgba(255,255,255,0.08);
+    --gold:#e8c574;
+    --rose:#d98aa3;
+    --violet:#8f6fce;
+    --text:#f4eee8;
+    --muted:#b9aec2;
+    --danger:#e2707a;
+    --success:#8fd0a6;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{
+    min-height:100vh;
+    display:flex;align-items:center;justify-content:center;
+    font-family:'Poppins',sans-serif;
+    color:var(--text);
+    background:
+      radial-gradient(ellipse at 15% 10%, rgba(143,111,206,0.20) 0%, transparent 55%),
+      radial-gradient(ellipse at 85% 90%, rgba(217,138,163,0.18) 0%, transparent 55%),
+      radial-gradient(ellipse at 50% 50%, rgba(232,197,116,0.06) 0%, transparent 60%),
+      var(--bg);
+    padding:24px;
+  }
+  .frame{width:100%;max-width:440px;}
+  .card{
+    background:var(--card);
+    backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);
+    border:1px solid var(--border);
+    border-radius:26px;
+    padding:36px 28px 30px;
+    text-align:center;
+    box-shadow:0 40px 90px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.05);
+    position:relative;
+    overflow:hidden;
+  }
+  .card::before{
+    content:'';position:absolute;inset:0;
+    background:linear-gradient(135deg, rgba(232,197,116,0.06), transparent 40%, rgba(217,138,163,0.05));
+    pointer-events:none;
+  }
+  .portrait{
+    width:104px;height:104px;border-radius:50%;
+    margin:0 auto 18px;
+    object-fit:cover;
+    border:2px solid rgba(232,197,116,0.55);
+    box-shadow:0 0 0 6px rgba(232,197,116,0.08), 0 18px 40px rgba(0,0,0,0.5);
+  }
+  h1{
+    font-family:'Playfair Display',serif;
+    font-size:26px;font-weight:700;
+    letter-spacing:0.5px;
+    background:linear-gradient(90deg, var(--gold), var(--rose), var(--violet));
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+    margin-bottom:4px;
+  }
+  .tagline{
+    font-size:12.5px;color:var(--muted);
+    letter-spacing:1.5px;text-transform:uppercase;
+    margin-bottom:26px;
+  }
+  .tagline b{color:var(--gold);font-weight:600;}
+
+  .field{
+    text-align:left;margin-bottom:16px;
+  }
+  .field label{
+    display:block;font-size:12px;color:var(--muted);
+    margin-bottom:7px;letter-spacing:0.3px;
+  }
+  .input-wrap{
+    display:flex;align-items:center;
+    background:rgba(255,255,255,0.04);
+    border:1px solid var(--border);
+    border-radius:14px;
+    padding:2px 4px 2px 14px;
+    transition:border-color .2s, box-shadow .2s;
+  }
+  .input-wrap:focus-within{
+    border-color:rgba(232,197,116,0.55);
+    box-shadow:0 0 0 3px rgba(232,197,116,0.10);
+  }
+  .input-wrap span{color:var(--muted);font-size:14px;margin-right:6px;}
+  input{
+    flex:1;background:transparent;border:none;outline:none;
+    color:var(--text);font-family:'Poppins',sans-serif;
+    font-size:15px;padding:13px 10px;letter-spacing:0.4px;
+  }
+  input::placeholder{color:rgba(255,255,255,0.28);}
+  .hint{font-size:11.5px;color:var(--muted);margin-top:6px;line-height:1.5;}
+
+  button.submit{
+    width:100%;margin-top:6px;
+    padding:14px;border:none;border-radius:14px;
+    font-family:'Poppins',sans-serif;font-size:15px;font-weight:600;
+    letter-spacing:0.4px;color:#1a0f0f;cursor:pointer;
+    background:linear-gradient(120deg, var(--gold), var(--rose));
+    box-shadow:0 14px 30px rgba(232,197,116,0.20);
+    transition:transform .15s, box-shadow .15s, opacity .15s;
+  }
+  button.submit:hover{transform:translateY(-1px);box-shadow:0 18px 36px rgba(232,197,116,0.28);}
+  button.submit:active{transform:translateY(0);}
+  button.submit:disabled{opacity:0.55;cursor:not-allowed;transform:none;}
+
+  .state{display:none;margin-top:22px;}
+  .state.show{display:block;animation:fade .35s ease;}
+  @keyframes fade{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+
+  .spinner{
+    width:34px;height:34px;margin:6px auto 14px;
+    border-radius:50%;
+    border:3px solid rgba(255,255,255,0.12);
+    border-top-color:var(--gold);
+    animation:spin 0.9s linear infinite;
+  }
+  @keyframes spin{to{transform:rotate(360deg);}}
+  .state p{font-size:13.5px;color:var(--muted);line-height:1.6;}
+
+  .code-box{
+    margin-top:8px;padding:18px 14px;
+    border-radius:16px;
+    background:rgba(143,208,166,0.08);
+    border:1px solid rgba(143,208,166,0.35);
+  }
+  .code-box .label{font-size:11px;letter-spacing:1.5px;color:var(--success);text-transform:uppercase;margin-bottom:8px;}
+  .code-value{
+    font-family:'Playfair Display',serif;
+    font-size:30px;font-weight:700;letter-spacing:5px;
+    color:#fff;word-break:break-all;
+  }
+  .copy-btn{
+    margin-top:14px;padding:9px 18px;border-radius:10px;
+    border:1px solid rgba(255,255,255,0.15);background:rgba(255,255,255,0.05);
+    color:var(--text);font-size:12.5px;cursor:pointer;font-family:'Poppins',sans-serif;
+    transition:background .15s;
+  }
+  .copy-btn:hover{background:rgba(255,255,255,0.10);}
+
+  .error-box{
+    padding:16px;border-radius:14px;
+    background:rgba(226,112,122,0.08);
+    border:1px solid rgba(226,112,122,0.35);
+    color:#f0c2c6;font-size:13.5px;line-height:1.6;
+  }
+
+  .steps{margin-top:26px;text-align:left;}
+  .steps summary{cursor:pointer;font-size:12px;color:var(--muted);letter-spacing:0.4px;}
+  .steps ol{margin:12px 0 0 18px;color:var(--muted);font-size:12.5px;line-height:1.9;}
+
+  footer{margin-top:22px;text-align:center;font-size:11.5px;color:rgba(255,255,255,0.35);}
+  footer a{color:var(--gold);text-decoration:none;}
+</style>
+</head>
+<body>
+
+<div class="frame">
+  <div class="card">
+    <img class="portrait" src="https://files.catbox.moe/4dwiou.png" alt="MONA LISA">
+    <h1>🥰 MONA LISA 🤭</h1>
+    <div class="tagline">Legendary Edition &nbsp;·&nbsp; <b>Powered by Progress Tech</b></div>
+
+    <form id="pairForm">
+      <div class="field">
+        <label for="countrySelect">Country</label>
+        <div class="input-wrap" style="padding:2px 8px;">
+          <select id="countrySelect" required
+                  style="flex:1;background:transparent;border:none;outline:none;color:var(--text);font-family:'Poppins',sans-serif;font-size:15px;padding:13px 6px;">
+            <option value="" disabled selected>Select your country…</option>
+          </select>
+        </div>
+      </div>
+      <div class="field">
+        <label for="numberInput">Your WhatsApp Number</label>
+        <div class="input-wrap">
+          <span id="dialCodeLabel">+</span>
+          <input id="numberInput" inputmode="numeric" autocomplete="off"
+                 placeholder="e.g. 682432296 (without the leading 0)" required>
+        </div>
+        <div class="hint">Pick your country above, then enter the rest of your number — drop the leading "0" if your country normally uses one locally.</div>
+      </div>
+      <button class="submit" id="submitBtn" type="submit">✨ Generate Pairing Code</button>
+    </form>
+
+    <div class="state" id="loadingState">
+      <div class="spinner"></div>
+      <p>🖼️ Mona Lisa is preparing your connection...</p>
+    </div>
+
+    <div class="state" id="successState">
+      <div class="code-box">
+        <div class="label">✨ The masterpiece is ready</div>
+        <div class="code-value" id="codeValue">— — — —</div>
+        <button class="copy-btn" id="copyBtn" type="button">📋 Copy Code</button>
+      </div>
+      <p style="margin-top:14px;">Open WhatsApp → Linked Devices → Link a Device → Link with phone number instead, then enter this code within 60 seconds.</p>
+    </div>
+
+    <div class="state" id="infoState">
+      <div class="code-box" style="background:rgba(232,197,116,0.08);border-color:rgba(232,197,116,0.35);">
+        <div class="label" style="color:var(--gold);" id="infoLabel">Status</div>
+        <p id="infoText" style="margin-top:4px;"></p>
+        <button class="copy-btn" id="forceRelinkBtn" type="button" style="display:none;margin-top:12px;">
+          🔄 Not you anymore? Force a fresh link
+        </button>
+      </div>
+    </div>
+
+    <div class="state" id="errorState">
+      <div class="error-box">
+        😌 Mona Lisa couldn't complete that request.
+        <div id="errorText" style="margin-top:6px;font-weight:500;"></div>
+      </div>
+    </div>
+
+    <details class="steps">
+      <summary>How pairing works</summary>
+      <ol>
+        <li>Pick your country, then enter the rest of your WhatsApp number.</li>
+        <li>Tap Generate — Mona Lisa requests a fresh pairing code.</li>
+        <li>On your phone: WhatsApp → Settings → Linked Devices → Link a Device.</li>
+        <li>Choose "Link with phone number instead" and type the code shown here <b>immediately</b> — it expires in about 60 seconds.</li>
+        <li>Your bot session activates automatically once linked.</li>
+      </ol>
+    </details>
+
+    <footer>
+      🥰 MONA LISA 🤭 · <a href="https://whatsapp.com/channel/0029Vb7Lk3yAzNbrVaWDOk1P" target="_blank">Official Channel</a>
+    </footer>
+  </div>
+</div>
+
+<script>
+const COUNTRIES = [
+  {"name":"Afghanistan","code":"+93","flag":"🇦🇫"},{"name":"Albania","code":"+355","flag":"🇦🇱"},
+  {"name":"Algeria","code":"+213","flag":"🇩🇿"},{"name":"Andorra","code":"+376","flag":"🇦🇩"},
+  {"name":"Angola","code":"+244","flag":"🇦🇴"},{"name":"Antigua and Barbuda","code":"+1-268","flag":"🇦🇬"},
+  {"name":"Argentina","code":"+54","flag":"🇦🇷"},{"name":"Armenia","code":"+374","flag":"🇦🇲"},
+  {"name":"Australia","code":"+61","flag":"🇦🇺"},{"name":"Austria","code":"+43","flag":"🇦🇹"},
+  {"name":"Azerbaijan","code":"+994","flag":"🇦🇿"},{"name":"Bahamas","code":"+1-242","flag":"🇧🇸"},
+  {"name":"Bahrain","code":"+973","flag":"🇧🇭"},{"name":"Bangladesh","code":"+880","flag":"🇧🇩"},
+  {"name":"Barbados","code":"+1-246","flag":"🇧🇧"},{"name":"Belarus","code":"+375","flag":"🇧🇾"},
+  {"name":"Belgium","code":"+32","flag":"🇧🇪"},{"name":"Belize","code":"+501","flag":"🇧🇿"},
+  {"name":"Benin","code":"+229","flag":"🇧🇯"},{"name":"Bhutan","code":"+975","flag":"🇧🇹"},
+  {"name":"Bolivia","code":"+591","flag":"🇧🇴"},{"name":"Bosnia and Herzegovina","code":"+387","flag":"🇧🇦"},
+  {"name":"Botswana","code":"+267","flag":"🇧🇼"},{"name":"Brazil","code":"+55","flag":"🇧🇷"},
+  {"name":"Brunei","code":"+673","flag":"🇧🇳"},{"name":"Bulgaria","code":"+359","flag":"🇧🇬"},
+  {"name":"Burkina Faso","code":"+226","flag":"🇧🇫"},{"name":"Burundi","code":"+257","flag":"🇧🇮"},
+  {"name":"Cabo Verde","code":"+238","flag":"🇨🇻"},{"name":"Cambodia","code":"+855","flag":"🇰🇭"},
+  {"name":"Cameroon","code":"+237","flag":"🇨🇲"},{"name":"Canada","code":"+1","flag":"🇨🇦"},
+  {"name":"Central African Republic","code":"+236","flag":"🇨🇫"},{"name":"Chad","code":"+235","flag":"🇹🇩"},
+  {"name":"Chile","code":"+56","flag":"🇨🇱"},{"name":"China","code":"+86","flag":"🇨🇳"},
+  {"name":"Colombia","code":"+57","flag":"🇨🇴"},{"name":"Comoros","code":"+269","flag":"🇰🇲"},
+  {"name":"Congo","code":"+242","flag":"🇨🇬"},{"name":"Costa Rica","code":"+506","flag":"🇨🇷"},
+  {"name":"Croatia","code":"+385","flag":"🇭🇷"},{"name":"Cuba","code":"+53","flag":"🇨🇺"},
+  {"name":"Cyprus","code":"+357","flag":"🇨🇾"},{"name":"Czechia","code":"+420","flag":"🇨🇿"},
+  {"name":"DR Congo","code":"+243","flag":"🇨🇩"},{"name":"Denmark","code":"+45","flag":"🇩🇰"},
+  {"name":"Djibouti","code":"+253","flag":"🇩🇯"},{"name":"Dominica","code":"+1-767","flag":"🇩🇲"},
+  {"name":"Dominican Republic","code":"+1-809","flag":"🇩🇴"},{"name":"Ecuador","code":"+593","flag":"🇪🇨"},
+  {"name":"Egypt","code":"+20","flag":"🇪🇬"},{"name":"El Salvador","code":"+503","flag":"🇸🇻"},
+  {"name":"Equatorial Guinea","code":"+240","flag":"🇬🇶"},{"name":"Eritrea","code":"+291","flag":"🇪🇷"},
+  {"name":"Estonia","code":"+372","flag":"🇪🇪"},{"name":"Eswatini","code":"+268","flag":"🇸🇿"},
+  {"name":"Ethiopia","code":"+251","flag":"🇪🇹"},{"name":"Fiji","code":"+679","flag":"🇫🇯"},
+  {"name":"Finland","code":"+358","flag":"🇫🇮"},{"name":"France","code":"+33","flag":"🇫🇷"},
+  {"name":"Gabon","code":"+241","flag":"🇬🇦"},{"name":"Gambia","code":"+220","flag":"🇬🇲"},
+  {"name":"Georgia","code":"+995","flag":"🇬🇪"},{"name":"Germany","code":"+49","flag":"🇩🇪"},
+  {"name":"Ghana","code":"+233","flag":"🇬🇭"},{"name":"Greece","code":"+30","flag":"🇬🇷"},
+  {"name":"Grenada","code":"+1-473","flag":"🇬🇩"},{"name":"Guatemala","code":"+502","flag":"🇬🇹"},
+  {"name":"Guinea","code":"+224","flag":"🇬🇳"},{"name":"Guinea-Bissau","code":"+245","flag":"🇬🇼"},
+  {"name":"Guyana","code":"+592","flag":"🇬🇾"},{"name":"Haiti","code":"+509","flag":"🇭🇹"},
+  {"name":"Honduras","code":"+504","flag":"🇭🇳"},{"name":"Hungary","code":"+36","flag":"🇭🇺"},
+  {"name":"Iceland","code":"+354","flag":"🇮🇸"},{"name":"India","code":"+91","flag":"🇮🇳"},
+  {"name":"Indonesia","code":"+62","flag":"🇮🇩"},{"name":"Iran","code":"+98","flag":"🇮🇷"},
+  {"name":"Iraq","code":"+964","flag":"🇮🇶"},{"name":"Ireland","code":"+353","flag":"🇮🇪"},
+  {"name":"Israel","code":"+972","flag":"🇮🇱"},{"name":"Italy","code":"+39","flag":"🇮🇹"},
+  {"name":"Ivory Coast","code":"+225","flag":"🇨🇮"},{"name":"Jamaica","code":"+1-876","flag":"🇯🇲"},
+  {"name":"Japan","code":"+81","flag":"🇯🇵"},{"name":"Jordan","code":"+962","flag":"🇯🇴"},
+  {"name":"Kazakhstan","code":"+7","flag":"🇰🇿"},{"name":"Kenya","code":"+254","flag":"🇰🇪"},
+  {"name":"Kiribati","code":"+686","flag":"🇰🇮"},{"name":"Kuwait","code":"+965","flag":"🇰🇼"},
+  {"name":"Kyrgyzstan","code":"+996","flag":"🇰🇬"},{"name":"Laos","code":"+856","flag":"🇱🇦"},
+  {"name":"Latvia","code":"+371","flag":"🇱🇻"},{"name":"Lebanon","code":"+961","flag":"🇱🇧"},
+  {"name":"Lesotho","code":"+266","flag":"🇱🇸"},{"name":"Liberia","code":"+231","flag":"🇱🇷"},
+  {"name":"Libya","code":"+218","flag":"🇱🇾"},{"name":"Liechtenstein","code":"+423","flag":"🇱🇮"},
+  {"name":"Lithuania","code":"+370","flag":"🇱🇹"},{"name":"Luxembourg","code":"+352","flag":"🇱🇺"},
+  {"name":"Madagascar","code":"+261","flag":"🇲🇬"},{"name":"Malawi","code":"+265","flag":"🇲🇼"},
+  {"name":"Malaysia","code":"+60","flag":"🇲🇾"},{"name":"Maldives","code":"+960","flag":"🇲🇻"},
+  {"name":"Mali","code":"+223","flag":"🇲🇱"},{"name":"Malta","code":"+356","flag":"🇲🇹"},
+  {"name":"Marshall Islands","code":"+692","flag":"🇲🇭"},{"name":"Mauritania","code":"+222","flag":"🇲🇷"},
+  {"name":"Mauritius","code":"+230","flag":"🇲🇺"},{"name":"Mexico","code":"+52","flag":"🇲🇽"},
+  {"name":"Micronesia","code":"+691","flag":"🇫🇲"},{"name":"Moldova","code":"+373","flag":"🇲🇩"},
+  {"name":"Monaco","code":"+377","flag":"🇲🇨"},{"name":"Mongolia","code":"+976","flag":"🇲🇳"},
+  {"name":"Montenegro","code":"+382","flag":"🇲🇪"},{"name":"Morocco","code":"+212","flag":"🇲🇦"},
+  {"name":"Mozambique","code":"+258","flag":"🇲🇿"},{"name":"Myanmar","code":"+95","flag":"🇲🇲"},
+  {"name":"Namibia","code":"+264","flag":"🇳🇦"},{"name":"Nauru","code":"+674","flag":"🇳🇷"},
+  {"name":"Nepal","code":"+977","flag":"🇳🇵"},{"name":"Netherlands","code":"+31","flag":"🇳🇱"},
+  {"name":"New Zealand","code":"+64","flag":"🇳🇿"},{"name":"Nicaragua","code":"+505","flag":"🇳🇮"},
+  {"name":"Niger","code":"+227","flag":"🇳🇪"},{"name":"Nigeria","code":"+234","flag":"🇳🇬"},
+  {"name":"North Korea","code":"+850","flag":"🇰🇵"},{"name":"North Macedonia","code":"+389","flag":"🇲🇰"},
+  {"name":"Norway","code":"+47","flag":"🇳🇴"},{"name":"Oman","code":"+968","flag":"🇴🇲"},
+  {"name":"Pakistan","code":"+92","flag":"🇵🇰"},{"name":"Palau","code":"+680","flag":"🇵🇼"},
+  {"name":"Palestine","code":"+970","flag":"🇵🇸"},{"name":"Panama","code":"+507","flag":"🇵🇦"},
+  {"name":"Papua New Guinea","code":"+675","flag":"🇵🇬"},{"name":"Paraguay","code":"+595","flag":"🇵🇾"},
+  {"name":"Peru","code":"+51","flag":"🇵🇪"},{"name":"Philippines","code":"+63","flag":"🇵🇭"},
+  {"name":"Poland","code":"+48","flag":"🇵🇱"},{"name":"Portugal","code":"+351","flag":"🇵🇹"},
+  {"name":"Qatar","code":"+974","flag":"🇶🇦"},{"name":"Romania","code":"+40","flag":"🇷🇴"},
+  {"name":"Russia","code":"+7","flag":"🇷🇺"},{"name":"Rwanda","code":"+250","flag":"🇷🇼"},
+  {"name":"Saint Kitts and Nevis","code":"+1-869","flag":"🇰🇳"},{"name":"Saint Lucia","code":"+1-758","flag":"🇱🇨"},
+  {"name":"Saint Vincent and the Grenadines","code":"+1-784","flag":"🇻🇨"},{"name":"Samoa","code":"+685","flag":"🇼🇸"},
+  {"name":"San Marino","code":"+378","flag":"🇸🇲"},{"name":"Sao Tome and Principe","code":"+239","flag":"🇸🇹"},
+  {"name":"Saudi Arabia","code":"+966","flag":"🇸🇦"},{"name":"Senegal","code":"+221","flag":"🇸🇳"},
+  {"name":"Serbia","code":"+381","flag":"🇷🇸"},{"name":"Seychelles","code":"+248","flag":"🇸🇨"},
+  {"name":"Sierra Leone","code":"+232","flag":"🇸🇱"},{"name":"Singapore","code":"+65","flag":"🇸🇬"},
+  {"name":"Slovakia","code":"+421","flag":"🇸🇰"},{"name":"Slovenia","code":"+386","flag":"🇸🇮"},
+  {"name":"Solomon Islands","code":"+677","flag":"🇸🇧"},{"name":"Somalia","code":"+252","flag":"🇸🇴"},
+  {"name":"South Africa","code":"+27","flag":"🇿🇦"},{"name":"South Korea","code":"+82","flag":"🇰🇷"},
+  {"name":"South Sudan","code":"+211","flag":"🇸🇸"},{"name":"Spain","code":"+34","flag":"🇪🇸"},
+  {"name":"Sri Lanka","code":"+94","flag":"🇱🇰"},{"name":"Sudan","code":"+249","flag":"🇸🇩"},
+  {"name":"Suriname","code":"+597","flag":"🇸🇷"},{"name":"Sweden","code":"+46","flag":"🇸🇪"},
+  {"name":"Switzerland","code":"+41","flag":"🇨🇭"},{"name":"Syria","code":"+963","flag":"🇸🇾"},
+  {"name":"Tajikistan","code":"+992","flag":"🇹🇯"},{"name":"Tanzania","code":"+255","flag":"🇹🇿"},
+  {"name":"Thailand","code":"+66","flag":"🇹🇭"},{"name":"Timor-Leste","code":"+670","flag":"🇹🇱"},
+  {"name":"Togo","code":"+228","flag":"🇹🇬"},{"name":"Tonga","code":"+676","flag":"🇹🇴"},
+  {"name":"Trinidad and Tobago","code":"+1-868","flag":"🇹🇹"},{"name":"Tunisia","code":"+216","flag":"🇹🇳"},
+  {"name":"Turkey","code":"+90","flag":"🇹🇷"},{"name":"Turkmenistan","code":"+993","flag":"🇹🇲"},
+  {"name":"Tuvalu","code":"+688","flag":"🇹🇻"},{"name":"Uganda","code":"+256","flag":"🇺🇬"},
+  {"name":"Ukraine","code":"+380","flag":"🇺🇦"},{"name":"United Arab Emirates","code":"+971","flag":"🇦🇪"},
+  {"name":"United Kingdom","code":"+44","flag":"🇬🇧"},{"name":"United States","code":"+1","flag":"🇺🇸"},
+  {"name":"Uruguay","code":"+598","flag":"🇺🇾"},{"name":"Uzbekistan","code":"+998","flag":"🇺🇿"},
+  {"name":"Vanuatu","code":"+678","flag":"🇻🇺"},{"name":"Vatican City","code":"+39","flag":"🇻🇦"},
+  {"name":"Venezuela","code":"+58","flag":"🇻🇪"},{"name":"Vietnam","code":"+84","flag":"🇻🇳"},
+  {"name":"Yemen","code":"+967","flag":"🇾🇪"},{"name":"Zambia","code":"+260","flag":"🇿🇲"},
+  {"name":"Zimbabwe","code":"+263","flag":"🇿🇼"}
+];
+
+const form = document.getElementById('pairForm');
+const numberInput = document.getElementById('numberInput');
+const countrySelect = document.getElementById('countrySelect');
+const dialCodeLabel = document.getElementById('dialCodeLabel');
+const submitBtn = document.getElementById('submitBtn');
+const states = {
+  loading: document.getElementById('loadingState'),
+  success: document.getElementById('successState'),
+  info: document.getElementById('infoState'),
+  error: document.getElementById('errorState'),
+};
+
+// Populate the country dropdown once, sorted alphabetically by name.
+[...COUNTRIES].sort((a, b) => a.name.localeCompare(b.name)).forEach(c => {
+  const opt = document.createElement('option');
+  opt.value = c.code.replace(/[^0-9]/g, ''); // digits only, e.g. "1268" for "+1-268"
+  opt.textContent = `${c.flag} ${c.name} (${c.code})`;
+  countrySelect.appendChild(opt);
+});
+
+countrySelect.addEventListener('change', () => {
+  const selected = COUNTRIES.find(c => c.code.replace(/[^0-9]/g, '') === countrySelect.value);
+  dialCodeLabel.textContent = selected ? selected.code.split('-')[0] : '+';
+});
+
+function hideAllStates() {
+  Object.values(states).forEach(el => el.classList.remove('show'));
+}
+
+function showState(name) {
+  hideAllStates();
+  states[name].classList.add('show');
+}
+
+let requestInFlight = false;
+
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  if (requestInFlight) return;
+
+  const dialDigits = countrySelect.value;
+  if (!dialDigits) {
+    showState('error');
+    document.getElementById('errorText').textContent = 'Please select your country first.';
+    return;
+  }
+
+  const raw = numberInput.value.trim();
+  let localDigits = raw.replace(/[^0-9]/g, '');
+  // Most countries write local numbers with a leading 0 that must be
+  // dropped for the international/E.164 form — this is the single most
+  // common reason a correctly-dialable local number fails to pair.
+  if (localDigits.startsWith('0')) localDigits = localDigits.slice(1);
+
+  const digits = dialDigits + localDigits;
+
+  if (localDigits.length < 5 || digits.length < 8 || digits.length > 15) {
+    showState('error');
+    document.getElementById('errorText').textContent =
+      'That number looks too short or too long for the selected country. Double-check it and try again.';
+    return;
+  }
+
+  requestInFlight = true;
+  submitBtn.disabled = true;
+  showState('loading');
+  document.querySelector('#loadingState p').textContent = '🖼️ Mona Lisa is preparing your connection...';
+  document.getElementById('forceRelinkBtn').style.display = 'none';
+
+  try {
+    const res = await fetch(`/code?number=${encodeURIComponent(digits)}`);
+    const data = await res.json().catch(() => ({}));
+
+    if (!res.ok || data.error) {
+      showState('error');
+      document.getElementById('errorText').textContent =
+        data.message || data.error || 'Something went wrong generating your code. Please try again.';
+      return;
+    }
+
+    if (data.code) {
+      showState('success');
+      document.getElementById('codeValue').textContent = data.code;
+      return;
+    }
+
+    if (data.status === 'already_connected') {
+      showState('info');
+      document.getElementById('infoLabel').textContent = '✅ Already Connected';
+      document.getElementById('infoText').textContent =
+        `This number is already linked and active${data.uptime ? ` (up ${data.uptime})` : ''}.`;
+      const relinkBtn = document.getElementById('forceRelinkBtn');
+      relinkBtn.style.display = 'inline-block';
+      relinkBtn.onclick = () => forceRelink(digits);
+      return;
+    }
+
+    if (data.status === 'reconnecting') {
+      showState('info');
+      document.getElementById('infoLabel').textContent = '🔄 Reconnecting';
+      document.getElementById('infoText').textContent =
+        data.message || 'Restoring your existing session — checking now...';
+      // Always give an immediate way out instead of a silent, indefinite
+      // wait — the user can force a brand-new code any time, right away.
+      const relinkBtn = document.getElementById('forceRelinkBtn');
+      relinkBtn.style.display = 'inline-block';
+      relinkBtn.onclick = () => forceRelink(digits);
+      pollReconnectStatus(digits);
+      return;
+    }
+
+    if (data.status === 'connection_in_progress') {
+      showState('info');
+      document.getElementById('infoLabel').textContent = '⏳ In Progress';
+      document.getElementById('infoText').textContent =
+        'A connection attempt for this number is already underway. Please wait a moment.';
+      const relinkBtn = document.getElementById('forceRelinkBtn');
+      relinkBtn.style.display = 'inline-block';
+      relinkBtn.onclick = () => forceRelink(digits);
+      return;
+    }
+
+    // Unrecognized-but-not-erroring response shape
+    showState('error');
+    document.getElementById('errorText').textContent =
+      'Mona Lisa received an unexpected response. Please try again shortly.';
+
+  } catch (err) {
+    showState('error');
+    document.getElementById('errorText').textContent =
+      'Could not reach the server. Please check your connection and try again.';
+  } finally {
+    requestInFlight = false;
+    submitBtn.disabled = false;
+  }
+});
+
+// Checks a few times whether a background reconnect actually finished —
+// instead of leaving the "Reconnecting..." message on screen forever with
+// no feedback, this either confirms success or tells the user plainly
+// that it's taking too long and points them at the force-relink button
+// that's already visible.
+async function pollReconnectStatus(digits, attempt = 1) {
+  const MAX_ATTEMPTS = 6; // ~18 seconds total
+  await new Promise(r => setTimeout(r, 3000));
+  try {
+    const res = await fetch(`/pair-status?number=${digits}`);
+    const data = await res.json();
+    const statusNow = data?.data?.status;
+    if (statusNow === 'connected') {
+      document.getElementById('infoLabel').textContent = '✅ Reconnected';
+      document.getElementById('infoText').textContent =
+        'This number is connected and active again — no further action needed.';
+      document.getElementById('forceRelinkBtn').style.display = 'none';
+      return;
+    }
+  } catch (_) {}
+
+  if (attempt >= MAX_ATTEMPTS) {
+    document.getElementById('infoText').textContent =
+      'Still reconnecting — this is taking longer than usual. You can keep waiting, or tap below to force a brand-new pairing code right now.';
+    return;
+  }
+  pollReconnectStatus(digits, attempt + 1);
+}
+
+async function forceRelink(digits) {
+  if (requestInFlight) return;
+  requestInFlight = true;
+  submitBtn.disabled = true;
+  document.getElementById('forceRelinkBtn').style.display = 'none';
+  showState('loading');
+  document.querySelector('#loadingState p').textContent = '🔄 Clearing the old link and starting fresh...';
+
+  try {
+    const res = await fetch(`/force-code?number=${encodeURIComponent(digits)}`);
+    const data = await res.json().catch(() => ({}));
+
+    if (!res.ok || data.status === 'error') {
+      showState('error');
+      document.getElementById('errorText').textContent =
+        data.message || data.error || 'Could not force a fresh link. Please try again.';
+      return;
+    }
+
+    const code = data.data?.code || data.code;
+    if (code) {
+      showState('success');
+      document.getElementById('codeValue').textContent = code;
+      document.querySelector('#successState .code-box .label').textContent = '✨ Fresh link ready';
+    } else {
+      showState('error');
+      document.getElementById('errorText').textContent = 'No new code was returned. Please try again.';
+    }
+  } catch (err) {
+    showState('error');
+    document.getElementById('errorText').textContent =
+      'Could not reach the server. Please check your connection and try again.';
+  } finally {
+    requestInFlight = false;
+    submitBtn.disabled = false;
+  }
+}
+
+document.getElementById('copyBtn').addEventListener('click', () => {
+  const code = document.getElementById('codeValue').textContent;
+  navigator.clipboard.writeText(code).then(() => {
+    const btn = document.getElementById('copyBtn');
+    const original = btn.textContent;
+    btn.textContent = '✅ Copied!';
+    setTimeout(() => { btn.textContent = original; }, 1600);
+  });
+});
+
+numberInput.addEventListener('input', () => {
+  numberInput.value = numberInput.value.replace(/[^0-9]/g, '');
+});
+</script>
+</body>
+</html>

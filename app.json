@@ -1,0 +1,44 @@
+{
+  "name": "🥰 MONA LISA V2 Bot 🤭",
+  "description": "Session/pairing generator for the MONA LISA V2 WhatsApp bot, powered by Progress Tech.",
+  "logo": "https://files.catbox.moe/4dwiou.png",
+  "repository": "https://github.com/progresstech237/MONA-LISA-Mini",
+  "keywords": [
+    "whatsapp-bot",
+    "mona-lisa",
+    "progress-tech"
+  ],
+  "success_url": "/",
+  "buildpacks": [
+    {
+      "url": "https://github.com/heroku/heroku-buildpack-nodejs#latest"
+    }
+  ],
+  "env": {
+    "MESSAGE": {
+      "description": "Message attached alongside the generated session/pairing code",
+      "value": "🥰 MONA LISA 🤭 — Powered by Progress Tech",
+      "required": false
+    },
+    "SESSION_ID": {
+      "description": "Session ID used to restore an existing WhatsApp session (leave blank to pair fresh)",
+      "value": "",
+      "required": false
+    },
+    "OWNER_NUMBER": {
+      "description": "Owner WhatsApp number(s), comma-separated, no plus sign",
+      "value": "237682432296",
+      "required": true
+    },
+    "PREFIX": {
+      "description": "Command prefix",
+      "value": ".",
+      "required": false
+    },
+    "MONGODB_URI": {
+      "description": "MongoDB Atlas connection string used for session/user storage",
+      "value": "",
+      "required": false
+    }
+  }
+}
